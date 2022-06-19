@@ -1,0 +1,63 @@
+
+import java.util.*;
+import java.io.*;
+
+public class Student{
+	private String name; 
+	private int id;
+	private Date dob;
+	public static final int NAME_SIZE=40;
+	public static final int RECORD_SIZE=2*NAME_SIZE+16;
+	
+	public Student(String name, int id, Date dob){
+		this.name=name;
+		this.id=id;
+		this.dob=dob;
+	}
+	
+	public void writeFixedString(String s, int size, DataOutputStream out) throws IOException{
+		for(int i=0;i<size;i++){
+			char c='#';
+			if(i<s.length()) c=s.charAt(i);
+			out.writeChar(c);
+		}
+	}
+	public String readFixedString(int size, DataInputStream in) throws IOException{
+		StringBuffer b=new StringBuffer(size);
+		int i=0;
+		boolean f=true;//flag
+		while(f&&i<size){
+			char c=in.readChar();
+			if (c=='#') f=false;
+			else b.append(c);
+			i++;
+		}
+		in.skip(2*(size-i));//muta pointerul in fisier peste 2*(size-i) caractere
+		return b.toString();
+	}
+	
+	public void writeData(DataOutputStream out) throws IOException{
+		writeFixedString(name,NAME_SIZE,out);
+		out.writeInt(id);//int=4octeti;
+		out.writeInt(dob.getYear());
+		out.writeInt(dob.getMonth());
+		out.writeInt(dob.getDate());//day returneaza nr 1-6 ->ziua saptamanii
+	}
+	
+	public void readData(DataInputStream in) throws IOException{
+		name=readFixedString(NAME_SIZE,in);
+		id=in.readInt();//cursorul sare peste cei 4 octeti ai INT
+		int y=in.readInt();
+		int m=in.readInt();
+		int d=in.readInt();
+		dob=new Date(y,m,d);
+		print();
+	}
+	
+	public void print(){
+		System.out.println("Numele: "+name);
+		System.out.println("ID: "+id);
+		System.out.println("Data nasterii: "+dob);
+	}
+	
+}

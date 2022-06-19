@@ -1,0 +1,64 @@
+package toyo.example.desenarecerc;
+import android.content.Context;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Path;
+import android.util.AttributeSet;
+import android.view.View;
+
+public class Cerc extends View {
+    Paint paint;
+    Path path;
+
+    public Cerc(Context context) {
+        super(context);
+        init();
+    }
+    public Cerc(Context context, AttributeSet attrs) {
+        super(context, attrs);
+        init();
+    }
+    public Cerc(Context context, AttributeSet attrs, int defStyle) {
+        super(context, attrs, defStyle);
+        init();
+    }
+    private void init(){
+        paint = new Paint();
+        paint.setColor(Color.BLUE);
+    }
+
+    protected void onDraw(Canvas canvas) {
+     
+        super.onDraw(canvas);
+
+        paint.setStyle(Paint.Style.FILL);
+        canvas.drawCircle(250, 250, 200, paint);
+        //drawCircle(cx, cy, radius, paint)
+    }
+}
+
+public class MainActivity extends Activity {
+    
+     public void onCreate(Bundle savedInstanceState) {
+         super.onCreate(savedInstanceState);
+         setContentView(new Cerc(this));
+     }
+
+
+    public boolean onCreateOptionsMenu(Menu menu) {
+    
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
+
+  
+    public boolean onOptionsItemSelected(MenuItem item) {
+       
+        int id = item.getItemId();
+        if (id == R.id.action_settings) {
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+}
